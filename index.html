@@ -3,43 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent Support Hub</title>
+    <title>Free AI Agent Hub</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #111;
-            color: #fff;
-            text-align: center;
-            padding: 50px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f0f12;
+            color: #e4e4e7;
+            padding: 30px 15px;
+            display: flex;
+            justify-content: center;
         }
         .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #222;
+            width: 100%;
+            max-width: 800px;
+            background: #18181b;
+            border: 1px solid #27272a;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
-        h1 { color: #00ffcc; }
-        p { font-size: 18px; line-height: 1.6; }
-        .btn {
-            display: inline-block;
+        h1 {
+            color: #00ffcc;
+            font-size: 26px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        p.subtitle {
+            color: #a1a1aa;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #f4f4f5;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            background: #27272a;
+            border: 1px solid #3f3f46;
+            border-radius: 8px;
+            color: #fff;
+            padding: 12px;
+            font-size: 15px;
+            resize: vertical;
+            outline: none;
+        }
+        textarea:focus {
+            border-color: #00ffcc;
+        }
+        button {
+            width: 100%;
             background: #00ffcc;
-            color: #111;
-            padding: 10px 20px;
-            text-decoration: none;
+            color: #09090b;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
             font-weight: bold;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #00e6b8;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+        }
+        button:disabled {
+            background: #3f3f46;
+            color: #71717a;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+            color: #00ffcc;
+            font-weight: bold;
+        }
+        .result-box {
+            display: none;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #27272a;
+        }
+        .result-box h3 {
+            color: #00ffcc;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        #output {
+            background: #27272a;
+            border: 1px solid #3f3f46;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 15px;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>🤖 AI Agent Project Ready!</h1>
-        <p>আমার তৈরি ফ্রি ডেটা অ্যানালিসিস এবং কনটেন্ট রাইটার এআই এজেন্ট প্রজেক্টটি সফলভাবে জিথাবে পুশ করা হয়েছে।</p>
-        <p><strong>নোট:</strong> এটি একটি পাইথন (Streamlit) প্রজেক্ট হওয়ায় সরাসরি GitHub Pages-এ রান করা সম্ভব নয়। এটি আপনার লোকাল কম্পিউটারে রান করতে <code>main.py</code> ফাইলটি ব্যবহার করুন।</p>
-        <a href="https://github.com/fahadmia510/GET-SUPPORT" class="btn">আমার কোড দেখুন</a>
+        <h1>🤖 Free AI Agent: ডেটা অ্যানালিসিস ও কনটেন্ট রাইটার</h1>
+        <p class="subtitle">আপনার ডেটা ইনপুট দিন, ব্যাক-এন্ডে থাকা মাল্টি-এজেন্ট সিস্টেম সেটি প্রসেস করে চমৎকার বাংলা কন্টেন্ট তৈরি করে দেবে।</p>
+        
+        <div class="input-group">
+            <label for="userData">আপনার ডেটা বা টেক্সট এখানে দিন:</label>
+            <textarea id="userData" placeholder="যেমন: ২০২৬ সালের প্রথম প্রান্তিকে বাংলাদেশে টেকনোলজি এবং এআই রিলেটেড কনটেন্টের ভিউয়ারশিপ ৪৫% বৃদ্ধি পেয়েছে..."></textarea>
+        </div>
+
+        <button id="runBtn" onclick="runAgents()">এজেন্ট রান করুন 🚀</button>
+
+        <div id="loadingStatus" class="loading">⏳ এআই এজেন্টরা কাজ করছে... একটু অপেক্ষা করুন...</div>
+
+        <div id="resultSection" class="result-box">
+            <h3>📝 এআই এজেন্টের তৈরি করা কন্টেন্ট:</h3>
+            <div id="output"></div>
+        </div>
     </div>
+
+    <script>
+        // আপনার ফ্রি টোকেন সরাসরি এখানে ইন্টিগ্রেট করা হয়েছে
+        const API_KEY = "AQ.Ab8RN6IE8IlgxGnwq-78dVH3J7t3pcR0Tj1GEgzGIUnH3q6PIQ";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+        async function runAgents() {
+            const userInput = document.getElementById("userData").value.trim();
+            const runBtn = document.getElementById("runBtn");
+            const loadingStatus = document.getElementById("loadingStatus");
+            const resultSection = document.getElementById("resultSection");
+            const outputDiv = document.getElementById("output");
+
+            if (!userInput) {
+                alert("⚠️ দয়া করে বিশ্লেষণ করার জন্য কিছু ডেটা বা টেক্সট ইনপুট দিন।");
+                return;
+            }
+
+            // UI আপডেট (লোডিং মোড)
+            runBtn.disabled = true;
+            loadingStatus.style.display = "block";
+            resultSection.style.display = "none";
+
+            // মাল্টি-এজেন্ট চেইন প্রম্পট ইঞ্জিনিয়ারিং
+            const agentPrompt = `
+            You are a Multi-Agent System consisting of two AI entities working sequentially:
+            
+            Agent 1: Senior Data Analyst
+            Task: Analyze the given raw data or text meticulously. Extract key trends, numbers, insights, and summarize the core pattern.
+            
+            Agent 2: Professional Content Writer & SEO Specialist
+            Task: Take the analysis from Agent 1 and convert it into an engaging, high-quality social media script, post, or blog article written in fluent and natural Bengali. It must include an attractive catchy title and be structured nicely with bullet points.
+
+            Here is the user's data to process:
+            "${userInput}"
+
+            Execute the workflow and output ONLY the final created Bengali content from Agent 2. Do not show internal reasoning steps.
+            `;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: agentPrompt }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    let finalContent = data.candidates[0].content.parts[0].text;
+                    
+                    // মার্কডাউন ফরম্যাট ক্লিন করা (ঐচ্ছিক)
+                    finalContent = finalContent.replace(/\*\*/g, ''); 
+                    
+                    outputDiv.textContent = finalContent;
+                    resultSection.style.display = "block";
+                } else {
+                    outputDiv.textContent = "❌ কোনো রেসপন্স পাওয়া যায়নি। টোকেন বা এপিআই লিমিট চেক করুন।";
+                    resultSection.style.display = "block";
+                }
+
+            } catch (error) {
+                console.error(error);
+                outputDiv.textContent = `❌ একটি সমস্যা হয়েছে: ${error.message}`;
+                resultSection.style.display = "block";
+            } finally {
+                runBtn.disabled = false;
+                loadingStatus.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
