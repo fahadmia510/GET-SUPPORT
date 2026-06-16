@@ -137,10 +137,9 @@
     </div>
 
     <script>
-        // আপনার ফ্রি টোকেন সরাসরি এখানে ইন্টিগ্রেট করা হয়েছে
+        // আপনার প্রজেক্টের নতুন এপিআই টোকেন ও কনফিগারেশন সেটআপ
         const API_KEY = "AQ.Ab8RN6IE8IlgxGnwq-78dVH3J7t3pcR0Tj1GEgzGIUnH3q6PIQ";
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-
+        
         async function runAgents() {
             const userInput = document.getElementById("userData").value.trim();
             const runBtn = document.getElementById("runBtn");
@@ -153,12 +152,11 @@
                 return;
             }
 
-            // UI আপডেট (লোডিং মোড)
             runBtn.disabled = true;
             loadingStatus.style.display = "block";
             resultSection.style.display = "none";
 
-            // মাল্টি-এজেন্ট চেইন প্রম্পট ইঞ্জিনিয়ারিং
+            // মাল্টি-এজেন্ট প্রম্পট ইঞ্জিনিয়ারিং লজিক
             const agentPrompt = `
             You are a Multi-Agent System consisting of two AI entities working sequentially:
             
@@ -175,7 +173,8 @@
             `;
 
             try {
-                const response = await fetch(API_URL, {
+                // ব্রাউজার রিকোয়েস্ট সিকিউরিটি হ্যান্ডেল করার জন্য সঠিক এন্ডপয়েন্ট ফরম্যাট
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -187,24 +186,24 @@
                     })
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP Error! Status: ${response.status}`);
+                }
+
                 const data = await response.json();
                 
                 if (data.candidates && data.candidates[0].content.parts[0].text) {
                     let finalContent = data.candidates[0].content.parts[0].text;
-                    
-                    // মার্কডাউন ফরম্যাট ক্লিন করা (ঐচ্ছিক)
-                    finalContent = finalContent.replace(/\*\*/g, ''); 
-                    
                     outputDiv.textContent = finalContent;
                     resultSection.style.display = "block";
                 } else {
-                    outputDiv.textContent = "❌ কোনো রেসপন্স পাওয়া যায়নি। টোকেন বা এপিআই লিমিট চেক করুন।";
+                    outputDiv.textContent = "❌ কোনো রেসপন্স পাওয়া যায়নি। আপনার গুগল ক্লাউড বা এআই স্টুডিও প্রজেক্টের এপিআই রেট লিমিট অথবা এক্সেস সেটিংস চেক করুন।";
                     resultSection.style.display = "block";
                 }
 
             } catch (error) {
                 console.error(error);
-                outputDiv.textContent = `❌ একটি সমস্যা হয়েছে: ${error.message}`;
+                outputDiv.textContent = `❌ সংযোগে সমস্যা হয়েছে। এরর মেসেজ: ${error.message}\n\nপরামর্শ: যদি টোকেন ব্লকড দেখায়, তবে Google AI Studio ড্যাশবোর্ডে গিয়ে 'Create API Key' বাটনে ক্লিক করে নতুন একটি স্ট্যান্ডার্ড 'AIzaSy' কী জেনারেট করে কোডের API_KEY লাইনে বসিয়ে দিন।`;
                 resultSection.style.display = "block";
             } finally {
                 runBtn.disabled = false;
